@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://staff.bootcss.com/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     <link rel='stylesheet' href="{% static 'blog/test1.css' %}"/>
     <link rel='stylesheet' href="{% static 'blog/screen.css' %}"/>
-
+    {% block header %}
+    {% endblock header %}
 
     
     
@@ -22,9 +23,19 @@
         <nav class="navbar navbar-default navbar-fixed-top navbar-orange">
             <div class="container">
                 <div class="collapse navbar-collapse" id="main-menu">
+                    <ul class='nav navbar-nav'>
+                        <li><a href="{% url "index" %}"><i class="fa fa-login"></i> 首页</a></li>
+                        <li><p> 当前页面{{ request.path }}</p></li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
+                        {% if request.user.is_authenticated %}
+                        <li><p>欢迎用户: {{ request.user.username }}</li>
+                        <li><a href="{% url "add_blog" %}"><i class="fa fa-login"></i> new</a></li>
+                        <li><a href="{% url "logout" %}"><i class="fa fa-login"></i> logout</a></li>
+                        {% else %}
                         <li><a href="{% url "login" %}"><i class="fa fa-lock"></i> login</a></li>
                         <li><a href="{% url "register" %}"><i class="fa fa-login"></i> Register</a></li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -62,7 +73,7 @@
                         <div class="widget">
         <h4 class="title">社区</h4>
         <div class="content community">
-            <p>QQ群：277327792</p>
+            <p>QQ号：1006190286</p>
             <p><a href="http://wenda.ghostchina.com/" title="Ghost中文网问答社区" target="_blank" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '问答社区'])"><i class="fa fa-comments"></i> 问答社区</a></p>
             <p><a href="http://weibo.com/ghostchinacom" title="Ghost中文网官方微博" target="_blank" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '官方微博'])"><i class="fa fa-weibo"></i> 官方微博</a></p>
         </div>
