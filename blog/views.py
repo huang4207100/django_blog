@@ -10,6 +10,9 @@ from .models import Blog
 def index(request):
     return render(request, 'blog/index.html', context=None)
 
+def register(request):
+    return Http404('fasdfa')
+    
 def user_login(request):
     username = request.POST['username']
     password = request.POST['password']

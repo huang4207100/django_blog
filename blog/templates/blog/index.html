@@ -23,8 +23,8 @@
             <div class="container">
                 <div class="collapse navbar-collapse" id="main-menu">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="https://app.propulso.io"><i class="fa fa-lock"></i> Log In</a></li>
-                        <li><a data-toggle="modal" data-target="#modal-subscription" class="btn-menu" onclick="ga('send', 'event', 'Subscribe', 'click', 'Top menu');">Sign Up</a></li>
+                        <li><a href="{% url "login" %}"><i class="fa fa-lock"></i> login</a></li>
+                        <li><a href="{% url "register" %}"><i class="fa fa-login"></i> Register</a></li>
                     </ul>
                 </div>
             </div>
