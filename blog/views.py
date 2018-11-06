@@ -72,6 +72,6 @@ def delete_blog(request,blog_id):
 #@login_required(login_url='blog/index/')
 def get_blog(request,blog_id):
     this_user = User.objects.get(username=request.user.username)
-    info = this_user.blog_set.get()
+    info = this_user.blog_set.get(pk=blog_id)
     content = info.content.encode()
     return render(request, 'blog/blog.html', context={'info': info, 'content':content})
