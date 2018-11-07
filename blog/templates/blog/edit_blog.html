@@ -1,0 +1,27 @@
+{% extends "index.html" %}
+{% load static %}
+
+{% block header %}
+        <script type="text/javascript" src="{% static 'tiny_mce/tiny_mce.js' %}"></script>
+        <!-- 也可以写成 <script type="text/javascript" src="/static/tiny_mce/tiny_mce.js"></script> -->
+        <script type="text/javascript">
+            tinyMCE.init({
+                'mode': 'textareas', // 将所有的textare变为编辑器
+                'theme': 'advanced',
+                'width': 700,
+                'height': 500
+            });
+        </script>
+{% endblock header %}
+
+{% block content %}
+    <form method="post" action='/blog/{{ blog.blog_id }}/do_edit_blog'>
+        {% csrf_token %}
+        标题：
+        <input name='title' type="text" value="{{ blog.title }}" /><br>
+        内容：
+        <textarea name="hcontent">{{ blog.content }}</textarea>
+        <input type="submit" value="提交" />
+        <br>
+    </form>
+{% endblock content %}

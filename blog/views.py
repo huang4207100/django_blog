@@ -9,7 +9,8 @@ from .forms import UserForm
 
 
 def index(request):
-    return render(request, 'blog/index.html')
+    blogs = [x for x in Blog.objects.all()]
+    return render(request, 'blog/index.html',context={'blogs':blogs})
 
 def register(request):
     return render(request, 'blog/register.html')
@@ -47,31 +48,3 @@ def do_user_login(request):
 def user_logout(request):
     logout(request)
     return redirect('index')
-
-@login_required()
-def add_blog(request):
-    return render(request, 'blog/add_blog.html')
-
-@login_required
-def do_add_blog(request):
-    title = request.POST.get('title')
-    hcontent = request.POST.get('hcontent')
-    this_user = User.objects.get(username=request.user.username)
-    this_user.blog_set.create(title=title, content=hcontent)
-    print(666)
-    return render(request, 'blog/index.html')
-
-#@login_required(login_url='blog/index/')
-def edit_blog(request,blog_id):
-    pass
-
-#@login_required(login_url='blog/index/')
-def delete_blog(request,blog_id):
-    pass
-
-#@login_required(login_url='blog/index/')
-def get_blog(request,blog_id):
-    this_user = User.objects.get(username=request.user.username)
-    info = this_user.blog_set.get(pk=blog_id)
-    content = info.content.encode()
-    return render(request, 'blog/blog.html', context={'info': info, 'content':content})

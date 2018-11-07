@@ -15,4 +15,9 @@
             {% endautoescape %}
         </div>
     </article>
+    {% if request.user.is_authenticated and request.user == info.user %}
+    <nav class="pagination" role="navigation">
+        <a class="older-posts" href="{% url "edit_blog" info.blog_id %}">修改内容</a>
+    </nav>
+    {% endif %}
 {% endblock content %}
