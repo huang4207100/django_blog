@@ -16,13 +16,15 @@ def do_add_blog(request):
     hcontent = request.POST.get('hcontent')
     this_user = User.objects.get(username=request.user.username)
     this_user.blog_set.create(title=title, content=hcontent)
-    return render(request, 'blog/index.html')
+    blog = Blog.objects.get(title=title)
+    return redirect(f'/blog/{blog.blog_id}')
 
-#@login_required(login_url='blog/index/')
+@login_required()
 def edit_blog(request,blog_id):
     blog = Blog.objects.get(pk=blog_id)
     return render(request, 'blog/edit_blog.html' ,context={'blog':blog})
 
+@login_required()
 def do_edit_blog(request,blog_id):
     title = request.POST.get('title')
     hcontent = request.POST.get('hcontent')
@@ -32,11 +34,11 @@ def do_edit_blog(request,blog_id):
     blog.save()
     return redirect(f'/blog/{blog_id}')
 
-#@login_required(login_url='blog/index/')
+@login_required()
 def delete_blog(request,blog_id):
-    pass
+    Blog.objects.filter(pk=blog_id).delete()
+    return redirect('index')
 
-#@login_required(redirect_field_name="login")
 def get_blog(request,blog_id):
     #this_user = User.objects.get(username=request.user.username)
     info = Blog.objects.get(pk=blog_id)

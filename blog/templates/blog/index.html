@@ -9,93 +9,109 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="https://staff.bootcss.com/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    <link rel='stylesheet' href="{% static 'blog/test1.css' %}"/>
-    <link rel='stylesheet' href="{% static 'blog/screen.css' %}"/>
+    <link rel='stylesheet' href="{% static 'blog/test1.css' %}" />
+    <link rel='stylesheet' href="{% static 'blog/screen.css' %}" />
     {% block header %}
     {% endblock header %}
 
-    
-    
-    
 </head>
-    <body>
-        <!-- Menu -->
-        <nav class="navbar navbar-default navbar-fixed-top navbar-orange">
-            <div class="container">
-                <div class="collapse navbar-collapse" id="main-menu">
-                    <ul class='nav navbar-nav'>
-                        <li><a href="{% url "index" %}"><i class="fa fa-login"></i> 首页</a></li>
-                        <li><p> 当前页面{{ request.path }}</p></li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if request.user.is_authenticated %}
-                        <li><p>欢迎用户: {{ request.user.username }}</li>
-                        <li><a href="{% url "add_blog" %}"><i class="fa fa-login"></i> 新建文章</a></li>
-                        <li><a href="{% url "logout" %}"><i class="fa fa-login"></i> 登出</a></li>
-                        {% else %}
-                        <li><a href="{% url "login" %}"><i class="fa fa-lock"></i> 登录</a></li>
-                        <li><a href="{% url "register" %}"><i class="fa fa-login"></i> 注册</a></li>
+
+<body>
+    <!-- Menu -->
+    <nav class="navbar navbar-default navbar-fixed-top navbar-orange">
+        <div class="container">
+            <div class="collapse navbar-collapse" id="main-menu">
+                <ul class='nav navbar-nav'>
+                    <li><a href="{% url "index" %}"><i class="fa fa-login"></i> 首页</a></li>
+                    <li>
+                        <p> 当前页面{{ request.path }}</p>
+                    </li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    {% if request.user.is_authenticated %}
+                    <li>
+                        <p>欢迎用户: {{ request.user.username }}
+                    </li>
+                    <li><a href="{% url "add_blog" %}"><i class="fa fa-login"></i> 新建文章</a></li>
+                    <li><a href="{% url "logout" %}"><i class="fa fa-login"></i> 登出</a></li>
+                    {% else %}
+                    <li><a href="{% url "login" %}"><i class="fa fa-lock"></i> 登录</a></li>
+                    <li><a href="{% url "register" %}"><i class="fa fa-login"></i> 注册</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+
+    <!-- Features -->
+    <section class="features" id="features">
+        <br><br>
+
+        <div class="container">
+            <main class="col-md-8 main-content">
+                {% block content %}
+                {% for blog in contacts %}
+                <article id='{{ blog.blog_id }}' class="post">
+                    <div class="post-head">
+                        <h1 class="post-title"><a href="/blog/{{ blog.blog_id }}">{{ blog.title }}</a></h1>
+                        <div class="post-meta">
+                            <span class="author">作者：<a href="/blog/{{ blog.blog_id }}">{{ blog.user.username }}</a></span>
+                            &bull;
+                            <time class="post-date" datetime={{blog.update_time}} title={{blog.update_time}}>{{blog.update_time}}</time>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        {% autoescape off %}
+                        {{ blog.content | truncatewords_html:10 | striptags }}
+                        {% endautoescape %}
+                    </div>
+                </article>
+                {% endfor%}
+                <div class="pagination">
+                    <span class="step-links">
+                        {% if contacts.has_previous %}
+                        <a class='older-posts' href="?page=1">first</a>
+                        <a class='older-posts' href="?page={{ contacts.previous_page_number }}">previous</a>
                         {% endif %}
-                    </ul>
+                        <span class="page-number">
+                            Page {{ contacts.number }} of {{ contacts.paginator.num_pages }}
+                        </span>
+                        {% if contacts.has_next %}
+                        <a class='older-posts' href="?page={{ contacts.next_page_number }}">next</a>
+                        <a class='older-posts' href="?page={{ contacts.paginator.num_pages }}">last</a>
+                        {% endif %}
+                    </span>
                 </div>
-            </div>
-        </nav>
+                {% endblock content %}
+                <!-- <nav class="pagination" role="navigation">
+                    <span class="page-number">第 1 页 &frasl; 共 9 页</span>
+                    <a class="older-posts" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+                </nav> -->
+            </main>
 
+            <aside class="col-md-4 sidebar">
+                <!-- start tag cloud widget -->
+                <div class="widget">
+                    <h4 class="title">社区</h4>
+                    <div class="content community">
+                        <p>QQ号：1006190286</p>
+                        <p><a href="http://wenda.ghostchina.com/" title="Ghost中文网问答社区" target="_blank" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '问答社区'])"><i
+                                    class="fa fa-comments"></i> 问答社区</a></p>
+                        <p><a href="http://weibo.com/ghostchinacom" title="Ghost中文网官方微博" target="_blank" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '官方微博'])"><i
+                                    class="fa fa-weibo"></i> 官方微博</a></p>
+                    </div>
+                </div>
+                <!-- end tag cloud widget -->
+                <!-- start widget -->
 
-        <!-- Features -->
-        <section class="features" id="features">
-            <br><br>
-            
-            <div class="container">
-                    <main class="col-md-8 main-content">
-                    {% block content %}
-                    {% for blog in blogs %}
-                    <article id='{{ blog.blog_id }}' class="post">
-                            <div class="post-head">
-                                <h1 class="post-title"><a href="/blog/{{ blog.blog_id }}">{{ blog.title }}</a></h1>
-                                <div class="post-meta">
-                                    <span class="author">作者：<a href="/blog/{{ blog.blog_id }}">{{ blog.user.username }}</a></span> &bull;
-                                    <time class="post-date" datetime={{blog.update_time}} title={{blog.update_time}}>{{blog.update_time}}</time>
-                                </div>
-                            </div>
-                            <div class="post-content">
-                                    {% autoescape off %}
-                                    {{ blog.content | truncatewords_html:10 | striptags  }}
-                                    {% endautoescape %}
-                            </div>
-                    </article>
-                    {% endfor%}
-                    {% endblock content %}
-                        <nav class="pagination" role="navigation">
-                                <span class="page-number">第 1 页 &frasl; 共 9 页</span>
-                                    <a class="older-posts" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-                        </nav>
-                    </main>
-                    
-                    <aside class="col-md-4 sidebar">
-                        <!-- start tag cloud widget -->
-                        <div class="widget">
-        <h4 class="title">社区</h4>
-        <div class="content community">
-            <p>QQ号：1006190286</p>
-            <p><a href="http://wenda.ghostchina.com/" title="Ghost中文网问答社区" target="_blank" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '问答社区'])"><i class="fa fa-comments"></i> 问答社区</a></p>
-            <p><a href="http://weibo.com/ghostchinacom" title="Ghost中文网官方微博" target="_blank" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '官方微博'])"><i class="fa fa-weibo"></i> 官方微博</a></p>
         </div>
-                        </div>
-                        <!-- end tag cloud widget -->	
-                        <!-- start widget -->
-                        <div class="widget">
-        <h4 class="title">下载 Ghost</h4>
-        <div class="content download">
-            <a target="_blank" href="https://github.com/TryGhost/Ghost/releases" class="btn btn-default btn-block" onclick="_hmt.push(['_trackEvent', 'big-button', 'click', '下载Ghost'])">Ghost 最新版（2.1.4）</a>
+        <!-- end widget -->
+        </aside>
         </div>
-                        </div>
-                        <!-- end widget -->	
-                    </aside>
-            </div>
-            
-        </section>
 
-    </body>
+    </section>
+
+</body>
 
 </html>

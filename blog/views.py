@@ -5,12 +5,19 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from .models import Blog
 from .forms import UserForm
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Create your views here.
 
 
 def index(request):
     blogs = [x for x in Blog.objects.all()]
-    return render(request, 'blog/index.html',context={'blogs':blogs})
+    paginator = Paginator(Blog.objects.all(),3)
+    try:
+        page = request.GET.get('page')
+    except:
+        page = 1
+    contacts = paginator.get_page(page)
+    return render(request, 'blog/index.html',context={'contacts':contacts})
 
 def register(request):
     return render(request, 'blog/register.html')
@@ -32,8 +39,6 @@ def user_login(request):
      return render(request, 'blog/login.html')
 
 def do_user_login(request):
-    #username = request.POST['username']
-    #password = request.POST['password']
     form = UserForm(request.POST)
     if form.is_valid():
         username = form.cleaned_data['your_name']
